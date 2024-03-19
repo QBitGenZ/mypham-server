@@ -33,7 +33,6 @@ module.exports = {
     try {
       const productId = req.params.id;
 
-
       const product = await Product.findById(productId).populate('feedbacks');
 
       if (!product) {
@@ -130,7 +129,7 @@ module.exports = {
   deleteProduct: async (req, res) => {
     try {
       // Extract product ID from request parameters
-      const productId = req.params.productId;
+      const productId = req.params.id;
 
       // Find the product by ID and delete it
       const deletedProduct = await Product.findByIdAndDelete(productId);

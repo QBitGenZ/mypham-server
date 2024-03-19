@@ -9,6 +9,7 @@ const path = require('path');
 const userRoute = require('./routes/user.route');
 const productRoute = require('./routes/product.route');
 const productTypeRoute = require('./routes/productType.route');
+const feedbackRoute = require('./routes/feedback.route');
 
 const app = express();
 
@@ -21,8 +22,9 @@ app.use('/uploads/', express.static(path.join(__dirname, 'uploads')));
 
 //use route
 app.use(`/${process.env.API_VERSION}/`, userRoute);
-app.use(`/${process.env.API_VERSION}/product/`, productRoute);
-app.use(`/${process.env.API_VERSION}/product-type/`, productTypeRoute);
+app.use(`/${process.env.API_VERSION}/products/`, productRoute);
+app.use(`/${process.env.API_VERSION}/product-types/`, productTypeRoute);
+app.use(`/${process.env.API_VERSION}/feedbacks/`, productTypeRoute);
 
 
 // kết nối database

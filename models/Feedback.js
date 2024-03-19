@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const FeedbackSchema = new mongoose.Schema({
+const feedbackSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
@@ -28,4 +28,6 @@ const FeedbackSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
   }
-})
+});
+
+module.exports = mongoose.model('Feedback', feedbackSchema);
