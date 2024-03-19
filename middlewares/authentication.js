@@ -24,4 +24,11 @@ function authenticateToken(req, res, next) {
   })
 }
 
-module.exports = authenticateToken;
+function isAdmin(req, res, next) {
+  if(req.user.userType === 'seller')
+    next();
+  else
+    return res.status(403).send({error: 'Chức năng chỉ dành cho Quản trị viên'});
+}
+
+module.exports = {authenticateToken, isAdmin,}

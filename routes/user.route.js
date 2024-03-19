@@ -2,14 +2,14 @@ const router = require('express').Router();
 const controller = require('../controllers/user.controller');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' })
-const authentication = require('../middlewares/authentication')
+const {authenticateToken,  isAdmin} = require('../middlewares/authentication')
 
 // Lấy danh sách các user
-router.get('', controller.index);
+router.get('', authenticateToken, isAdmin, controller.index);
 
-router.get('/admin', controller.getAdmin);
+router.get('/admin', authenticateToken, isAdmin, controller.getAdmin);
 
-router.get('/user', controller.getUser);
+router.get('/user', authenticateToken, isAdmin, controller.getUser);
 
 // Thêm user mua đăng ký
 router.post('/register', upload.single('avatar'), controller.register);
@@ -18,10 +18,12 @@ router.post('/register', upload.single('avatar'), controller.register);
 router.post('/admin', upload.single('avatar'), controller.createAdmin);
 
 // Chỉnh sửa thông tin user
-router.put('/:username', upload.single('avatar'), controller.editUser);
+router.put('/:username', authenticateToken, upload.single('avatar'), controller.updateUser);
 
+router.delete('', authenticateToken, controller.deleteUserSelf);
 //Xóa user
-router.delete('/:username', authentication, controller.deleteUser);
+router.delete('/:username', authenticateToken, controller.deleteUser);
+
 
 //đăng nhập
 router.post('/login',upload.single('avatar'), controller.login)

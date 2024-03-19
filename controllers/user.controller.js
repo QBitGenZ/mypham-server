@@ -138,8 +138,8 @@ module.exports = {
       if (checkUsernameExist)
         return res.status(422).send({ error: 'Username đã tồn tại' });
 
-
-
+      const salt = await bcrypt.genSalt(10);
+      const hashPass = await bcrypt.hash(req.body.password, salt);
 
       const user = new User({
         username: req.body.username,
@@ -154,7 +154,7 @@ module.exports = {
       });
 
       const userCreated = await user.save(); // Lưu người dùng vào cơ sở dữ liệu
-      delete userData.password;
+      delete userCreated.password;
 
       return res.status(201).send({ 'data': userCreated });
     } catch (error) {
@@ -163,10 +163,9 @@ module.exports = {
     }
   },
 
-  editUser: async (req, res) => {
+  updateUser: async (req, res) => {
     try{
-      const username = req.params.username;
-
+      const username = req.user.username;
 
       const existUser = await User.findOne({username: username});
       if(!existUser)
@@ -207,6 +206,23 @@ module.exports = {
       const username = req.params.username;
 
       existUser = User.findOne({username: username});
+      if (!existUser)
+        return res.status(404).send({error: 'Người dùng không tồn tại'})
+
+      await User.findOneAndDelete({username: username});
+
+      return res.status(204).send({});
+
+    } catch (e) {
+      return res.status(500).send({'error': 'Lỗi nội bộ'});
+    }
+  },
+
+  deleteUserSelf: async (req, res) => {
+    try {
+      const username = req.user.username
+
+      const existUser = User.findOne({username: username});
       if (!existUser)
         return res.status(404).send({error: 'Người dùng không tồn tại'})
 
