@@ -9,7 +9,7 @@ module.exports = {
       const page = parseInt(req.query.page || 1);
 
       const query = ProductType.find().sort({_id: -1})
-        .populate('product');
+        .populate('products');
 
       const data = await query.skip((page - 1) * limit).limit(limit);
 

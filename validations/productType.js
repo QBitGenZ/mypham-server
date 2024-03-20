@@ -5,4 +5,8 @@ const productTypeValidationSchema = Joi.object({
   description: Joi.string().optional(),
 });
 
-module.exports = productTypeValidationSchema;
+const validateProduct = (productData) => {
+  return productTypeValidationSchema.validate(productData);
+};
+
+module.exports = validateProduct;

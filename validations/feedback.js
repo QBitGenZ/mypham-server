@@ -9,4 +9,8 @@ const feedbackValidationSchema = Joi.object({
   product: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(), // ID của sản phẩm
 });
 
-module.exports = feedbackValidationSchema;
+const feedbackValidate = (feedbackData) => {
+  return feedbackValidationSchema.validate(feedbackData);
+}
+
+module.exports = feedbackValidate;
