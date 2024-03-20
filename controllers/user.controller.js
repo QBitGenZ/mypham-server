@@ -109,14 +109,14 @@ module.exports = {
         password: hashPass,
         fullname: req.body.fullname,
         addresses: [req.body.address], // Lưu địa chỉ từ yêu cầu gửi
-        avatar: req.file.path,
+        avatar: req?.file?.path || null,
         email: req.body.email,
         phone: req.body.phone,
         birthday: req.body.birthday || Date.now(),
       });
 
       const userCreated = await user.save(); // Lưu người dùng vào cơ sở dữ liệu
-      delete userData.password;
+      delete userCreated.password;
 
       return res.status(201).send({ 'data': userCreated });
     } catch (error) {
