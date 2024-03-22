@@ -33,7 +33,7 @@ module.exports = {
         product,
       } = req.body;
 
-      const images = req.files.map(file => file.path);
+      const images = req?.files?.map(file => file.path);
       const user = req.user._id;
 
       const feedback = new Feedback(
@@ -70,7 +70,7 @@ module.exports = {
       if(req.user._id !== feedback.user)
         return res.status(400).send({'error': 'Bạn không có quyền chỉnh sửa'})
 
-      const images = body.files.map(file => file.path);
+      const images = body?.files?.map(file => file.path);
 
       feedback.title = req.body.title || feedback.title
       feedback.text = req.body.text || feedback.text
@@ -92,15 +92,14 @@ module.exports = {
     try {
       const feedbackId = req.params.id;
 
-      const feedback = await Feedback.findById(feedbackId);
+      if(req.user._id !== feedback.user)
+        return res.status(400).send({'error': 'Bạn không có quyền chỉnh sửa'})
+
+      const feedback = await Feedback.findByIdAndDelete(feedbackId);
 
       if(!feedback)
         return res.status(404).send({'error': 'Không tìm thấy phản hồi'})
 
-      if(req.user._id !== feedback.user)
-        return res.status(400).send({'error': 'Bạn không có quyền chỉnh sửa'})
-
-      await feedback.remove();
       return res.sendStatus(204);
     }
     catch (error) {

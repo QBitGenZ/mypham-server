@@ -56,7 +56,7 @@ module.exports = {
       }
 
       // Process uploaded images
-      const images = req.files.map(file => file.path);
+      const images = req?.files?.map(file => file.path);
 
       // Extract other product data
       const {
@@ -91,7 +91,7 @@ module.exports = {
       // Extract product ID from request parameters
       const productId = req.params.id;
 
-      const images = req.files.map(file => file.path);
+      const images = req?.files?.map(file => file.path);
 
       // Find the product by ID
       const product = await Product.findById(productId);

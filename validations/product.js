@@ -16,6 +16,7 @@ const productValidationSchema = Joi.object({
   expiryDate: Joi.date().optional(),
   feedbacks: Joi.array().items(Joi.string()).optional(),
   images: Joi.array().items(Joi.string()).optional(),
+  brand: Joi.string().optional(),
 });
 
 const validateProduct = (productData) => {
