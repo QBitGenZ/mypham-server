@@ -11,7 +11,7 @@ router.get('/', authenticateToken, controller.getCart);
 router.post('/', authenticateToken, validateCartItem, controller.addToCart);
 
 // Cập nhật số lượng mặt hàng trong giỏ hàng
-router.put('/:id', authenticateToken, validateCartItem, controller.updateCartItem);
+router.put('/:id', authenticateToken, controller.updateCartItem);
 
 // Xóa một mặt hàng khỏi giỏ hàng
 router.delete('/:id', authenticateToken, controller.deleteCartItem);
