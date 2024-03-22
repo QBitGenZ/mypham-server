@@ -61,13 +61,13 @@ module.exports = {
       // Extract other product data
       const {
         name, type, origin, volume, weight, utility, description,
-        price, cost, quantity, tags, productionDate, expiryDate, feedbacks
+        price, cost, quantity, tags, productionDate, expiryDate, brand
       } = req.body;
 
       // Create new product instance
       const product = new Product({
         name, type, origin, volume, weight, utility, description,
-        price, cost, quantity, tags, images, productionDate, expiryDate, feedbacks
+        price, cost, quantity, tags, images, productionDate, expiryDate, brand
       });
 
       // Save the product to the database
@@ -82,12 +82,6 @@ module.exports = {
 
   updateProduct: async (req, res) => {
     try {
-      // Validate product data
-      const { error } = ProductValidate(req.body);
-      if (error) {
-        return res.status(400).send({ 'error': error.details[0].message });
-      }
-
       // Extract product ID from request parameters
       const productId = req.params.id;
 
@@ -115,6 +109,7 @@ module.exports = {
       product.productionDate = req.body.productionDate || product.productionDate;
       product.expiryDate = req.body.expiryDate || product.expiryDate;
       product.feedbacks = req.body.feedbacks || product.feedbacks;
+      product.brand = req.body.brand || product.brand;
 
       // Save the updated product to the database
       const updatedProduct = await product.save();
