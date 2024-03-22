@@ -6,10 +6,10 @@ const upload = multer({ dest: 'uploads/' })
 
 route.get('', authenticateToken, controller.getProducts);
 
-route.post('', authenticateToken, isAdmin, upload.array('product', 10),
+route.post('', authenticateToken, isAdmin, upload.array('images', 10),
   controller.createProduct);
 
-route.put('/:id', authenticateToken, isAdmin, upload.array('product', 10),
+route.put('/:id', authenticateToken, isAdmin, upload.array('images', 10),
   controller.updateProduct);
 
 route.delete('/:id',authenticateToken, isAdmin, controller.deleteProduct);
