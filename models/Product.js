@@ -54,7 +54,10 @@ const productSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Feedback',
     }
-  ]
+  ],
+  sale: {
+    type: Number,
+  }
 });
 
 module.exports = mongoose.model('Product', productSchema);
