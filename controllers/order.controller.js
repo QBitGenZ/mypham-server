@@ -30,8 +30,13 @@ exports.createOrder = async (req, res) => {
   if(error)
     return res.status(400).send({error: error})
 
+  const {paymentMethod, deliveryMethod, address, items} = orderData;
+  const user = req.user._id;
+
   try {
-    const newOrder = new Order(orderData);
+    const newOrder = new Order({
+      user, paymentMethod, deliveryMethod, address, items
+    });
     await newOrder.save();
     return res.status(201).json({data: newOrder});
   } catch (error) {
@@ -42,6 +47,7 @@ exports.createOrder = async (req, res) => {
 exports.updateOrderById = async (req, res) => {
   const orderId = req.params.id;
   const orderData = req.body;
+  orderData.user = req.user._id;
 
   try {
     const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true });
