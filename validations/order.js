@@ -11,7 +11,6 @@ const orderJoiSchema = Joi.object({
   deliveryMethod: Joi.string().required(),
   address: Joi.string().required(),
   items: Joi.array().items(orderItemJoiSchema).required(),
-  created_at: Joi.date().default(Date.now(), 'current date')
 });
 
 function validateOrder(order) {
