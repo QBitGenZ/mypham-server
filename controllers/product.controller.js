@@ -50,10 +50,17 @@ module.exports = {
   createProduct: async (req, res) => {
     try {
       // Validate product data
+      req.body.tags = JSON.parse(req.body.tags)
+      delete req.body.images;
+      console.log(1, req.files);
+
       const { error } = ProductValidate(req.body);
       if (error) {
         return res.status(400).send({ 'error': error.details[0].message });
       }
+
+
+      
 
       // Process uploaded images
       const images = req?.files?.map(file => file.path);
