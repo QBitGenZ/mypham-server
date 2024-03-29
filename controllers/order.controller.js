@@ -13,7 +13,7 @@ exports.getAllOrders = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user').populate('items.product');
     if (!order) return res.status(404).json({ error: 'Không tìm thấy' });
     return res.json({data: order});
   } catch (error) {
@@ -37,7 +37,7 @@ exports.createOrder = async (req, res) => {
     const newOrder = new Order({
       user, paymentMethod, deliveryMethod, address, items
     });
-    await newOrder.save().populate('user').populate('items.product');
+    await newOrder.save();
     return res.status(201).json({data: newOrder});
   } catch (error) {
     res.status(500).send({error: 'Lỗi nội bộ'});
@@ -52,7 +52,7 @@ exports.updateOrderById = async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true });
     if (!updatedOrder) return res.status(404).json({ error: 'Không tìm thấy' });
-    res.json(updatedOrder.populate('user').populate('items.product'));
+    res.json(updatedOrder);
   } catch (error) {
     res.status(500).send({error: 'Lỗi nội bộ'});
   }
