@@ -1,6 +1,32 @@
 const Order = require('../models/order'); 
 const validate = require('../validations/order');
 
+exports.getAllOrdersByAdmin = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit || 10);
+    const page = parseInt(req.query.page || 1);
+
+    const query = Order.find().sort({_id: -1}).populate('user').populate('items.product');
+    const data = await query.skip((page - 1) * limit).limit(limit);
+
+    const totalDoc = await Product.countDocuments(); // Sửa lỗi ở đây
+    const totalPage = Math.ceil(totalDoc / limit);
+
+    return res.status(200).json({
+      data,
+      meta: {
+        page,
+        limit,
+        totalDoc,
+        totalPage,
+      }
+    });
+  } catch (error) {
+    console.error(error); // Log lỗi ra console để debug
+    return res.status(500).json({ error: 'Internal server error' }); // Trả về lỗi 500 nếu có lỗi xảy ra
+  }
+}
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id }).populate('user').populate('items.product');
