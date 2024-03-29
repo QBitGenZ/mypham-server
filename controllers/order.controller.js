@@ -37,7 +37,11 @@ exports.createOrder = async (req, res) => {
     const newOrder = new Order({
       user, paymentMethod, deliveryMethod, address, items
     });
+
+    // Lưu đơn hàng mới và sử dụng populate để lấy thông tin của người dùng và sản phẩm
     await newOrder.save();
+    await newOrder.populate('user').populate('items.product').execPopulate();
+
     return res.status(201).json({data: newOrder});
   } catch (error) {
     res.status(500).send({error: 'Lỗi nội bộ'});
@@ -50,7 +54,7 @@ exports.updateOrderById = async (req, res) => {
   orderData.user = req.user._id;
 
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true });
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true }).populate('user').populate('items.product');
     if (!updatedOrder) return res.status(404).json({ error: 'Không tìm thấy' });
     res.json(updatedOrder);
   } catch (error) {
