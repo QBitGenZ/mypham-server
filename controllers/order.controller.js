@@ -43,6 +43,7 @@ exports.createOrder = async (req, res) => {
 
     return res.status(201).json({data: newOrder});
   } catch (error) {
+    console.log(error);
     res.status(500).send({error: 'Lỗi nội bộ'});
   }
 };
