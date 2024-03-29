@@ -4,7 +4,7 @@ const validate = require('../validations/order');
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({user: req.user._id});
-    return res.status(200).json({data: orders});
+    return res.status(200).send({data: orders});
   } catch (error) {
     console.error(error.message);
     res.status(500).send({error: 'Lỗi nội bộ'});
