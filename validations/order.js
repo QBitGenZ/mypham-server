@@ -6,7 +6,6 @@ const orderItemJoiSchema = Joi.object({
 });
 
 const orderJoiSchema = Joi.object({
-  user: Joi.string().required(),
   paymentMethod: Joi.string().required(),
   deliveryMethod: Joi.string().required(),
   address: Joi.string().required(),

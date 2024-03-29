@@ -1,4 +1,4 @@
-const Order = require('../models/order'); // Import model Order
+const Order = require('../models/order'); 
 const validate = require('../validations/order');
 
 exports.getAllOrders = async (req, res) => {
@@ -38,7 +38,6 @@ exports.createOrder = async (req, res) => {
       user, paymentMethod, deliveryMethod, address, items
     });
 
-    // Lưu đơn hàng mới và sử dụng populate để lấy thông tin của người dùng và sản phẩm
     await newOrder.save();
     await newOrder.populate('user').populate('items.product').execPopulate();
 
