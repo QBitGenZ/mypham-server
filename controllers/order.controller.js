@@ -3,7 +3,7 @@ const validate = require('../validations/order');
 
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find({user: req.user._id});
+    const orders = await Order.find({user: req.user._id}).populate('user').populate('items.product');
     return res.status(200).send({data: orders});
   } catch (error) {
     console.error(error.message);
@@ -37,7 +37,7 @@ exports.createOrder = async (req, res) => {
     const newOrder = new Order({
       user, paymentMethod, deliveryMethod, address, items
     });
-    await newOrder.save();
+    await newOrder.save().populate('user').populate('items.product');
     return res.status(201).json({data: newOrder});
   } catch (error) {
     res.status(500).send({error: 'Lỗi nội bộ'});
@@ -52,7 +52,7 @@ exports.updateOrderById = async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true });
     if (!updatedOrder) return res.status(404).json({ error: 'Không tìm thấy' });
-    res.json(updatedOrder);
+    res.json(updatedOrder.populate('user').populate('items.product'));
   } catch (error) {
     res.status(500).send({error: 'Lỗi nội bộ'});
   }
