@@ -10,6 +10,7 @@ const orderJoiSchema = Joi.object({
   deliveryMethod: Joi.string().required(),
   address: Joi.string().required(),
   items: Joi.array().items(orderItemJoiSchema).required(),
+  status: Joi.string.optional(),
 });
 
 function validateOrder(order) {
