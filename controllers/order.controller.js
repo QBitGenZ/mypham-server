@@ -103,3 +103,13 @@ exports.deleteOrderById = async (req, res) => {
     res.status(500).send({ error: 'Lỗi nội bộ' });
   }
 };
+
+exports.getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id }).populate('user').populate('items.product');
+    return res.status(200).send({ data: orders });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ error: 'Lỗi nội bộ' });
+  }
+}

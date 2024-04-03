@@ -30,7 +30,7 @@ app.use(`/${process.env.API_VERSION}/product-types/`, productTypeRoute);
 app.use(`/${process.env.API_VERSION}/feedbacks/`, feedbackRoute);
 app.use(`/${process.env.API_VERSION}/carts/`, cartRoute);
 app.use(`/${process.env.API_VERSION}/orders/`, orderRoute);
-app.use(`/${process.env.API_VERSION}/payment/`, vnpayRoute);
+app.use(`/${process.env.API_VERSION}/payments/`, vnpayRoute);
 
 
 // kết nối database

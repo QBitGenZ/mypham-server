@@ -12,6 +12,8 @@ router.post('/', authenticateToken, controller.createOrder);
 
 router.delete('/:id', authenticateToken, controller.deleteOrderById);
 
+router.get('/myorders', authenticateToken, controller.getMyOrders);
+
 
 
 module.exports = router;

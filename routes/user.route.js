@@ -11,6 +11,9 @@ router.get('/admin', authenticateToken, isAdmin, controller.getAdmin);
 
 router.get('/user', authenticateToken, isAdmin, controller.getUser);
 
+//Lấy thông tin cá nhân
+router.get('/info', authenticateToken, controller.getInfo);
+
 // Thêm user mua đăng ký
 router.post('/register', upload.single('avatar'), controller.register);
 
@@ -24,8 +27,9 @@ router.delete('', authenticateToken, controller.deleteUserSelf);
 //Xóa user
 router.delete('/:username', authenticateToken, controller.deleteUser);
 
-
 //đăng nhập
 router.post('/login',upload.single('avatar'), controller.login)
+
+
 
 module.exports = router;

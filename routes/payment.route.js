@@ -20,13 +20,11 @@ router.post('/create_payment_url', function (req, res, next) {
         req.connection.remoteAddress ||
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
-
-    let config = require('config');
     
-    let tmnCode = config.get('vnp_TmnCode');
-    let secretKey = config.get('vnp_HashSecret');
-    let vnpUrl = config.get('vnp_Url');
-    let returnUrl = config.get('vnp_ReturnUrl');
+    let tmnCode = process.env.VNP_TMNCODE;
+    let secretKey = process.env.VNP_HASHSECRET;
+    let vnpUrl = process.env.VNP_URL;
+    let returnUrl = process.env.VNP_RETURNURL;
     let orderId = moment(date).format('DDHHmmss');
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;
@@ -75,10 +73,9 @@ router.get('/vnpay_return', function (req, res, next) {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = sortObject(vnp_Params);
-
-    let config = require('config');
-    let tmnCode = config.get('vnp_TmnCode');
-    let secretKey = config.get('vnp_HashSecret');
+     
+    let tmnCode = process.env.VNP_TMNCODE;
+    let secretKey = process.env.VNP_HASHSECRET;
 
     let querystring = require('qs');
     let signData = querystring.stringify(vnp_Params, { encode: false });
@@ -89,9 +86,9 @@ router.get('/vnpay_return', function (req, res, next) {
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-        res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+        res.send('success', {code: vnp_Params['vnp_ResponseCode']})
     } else{
-        res.render('success', {code: '97'})
+        res.send('success', {code: '97'})
     }
 });
 
@@ -106,8 +103,9 @@ router.get('/vnpay_ipn', function (req, res, next) {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = sortObject(vnp_Params);
-    let config = require('config');
-    let secretKey = config.get('vnp_HashSecret');
+     
+    let secretKey = process.env.VNP_HASHSECRET;
+
     let querystring = require('qs');
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let crypto = require("crypto");     
@@ -159,12 +157,11 @@ router.post('/querydr', function (req, res, next) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();
 
-    let config = require('config');
     let crypto = require("crypto");
     
-    let vnp_TmnCode = config.get('vnp_TmnCode');
-    let secretKey = config.get('vnp_HashSecret');
-    let vnp_Api = config.get('vnp_Api');
+    let vnp_TmnCode =process.env.VNP_TMNCODE;
+    let secretKey = process.env.VNP_HASHSECRET;
+    let vnp_Api = process.env.VNP_API;
     
     let vnp_TxnRef = req.body.orderId;
     let vnp_TransactionDate = req.body.transDate;
@@ -216,12 +213,11 @@ router.post('/refund', function (req, res, next) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();
 
-    let config = require('config');
     let crypto = require("crypto");
-   
-    let vnp_TmnCode = config.get('vnp_TmnCode');
-    let secretKey = config.get('vnp_HashSecret');
-    let vnp_Api = config.get('vnp_Api');
+
+    let vnp_TmnCode =process.env.VNP_TMNCODE;
+    let secretKey = process.env.VNP_HASHSECRET;
+    let vnp_Api = process.env.VNP_API;
     
     let vnp_TxnRef = req.body.orderId;
     let vnp_TransactionDate = req.body.transDate;

@@ -262,5 +262,9 @@ module.exports = {
     catch (e) {
       return res.status(500).send({error: 'Lỗi nội bộ'});
     }
+  },
+
+  getInfo: async function(req, res) {
+    return res.status(200).send({data: req.user});
   }
 }
