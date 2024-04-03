@@ -265,6 +265,10 @@ module.exports = {
   },
 
   getInfo: async function(req, res) {
-    return res.status(200).send({data: req.user});
+    const username = req.user.username;
+
+    const existUser = await User.findOne({username: username});
+
+    return res.status(200).send({data: existUser});
   }
 }

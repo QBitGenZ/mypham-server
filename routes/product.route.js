@@ -4,7 +4,7 @@ const multer = require('multer');
 const {authenticateToken, isAdmin} = require('../middlewares/authentication');
 const upload = multer({ dest: 'uploads/' })
 
-route.get('', authenticateToken, controller.getProducts);
+route.get('', controller.getProducts);
 
 route.post('', authenticateToken, isAdmin, upload.array('images'),
   controller.createProduct);
