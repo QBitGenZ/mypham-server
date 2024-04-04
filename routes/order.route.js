@@ -10,6 +10,8 @@ router.get('/myorders', authenticateToken, controller.getMyOrders);
 
 router.get('/:id', authenticateToken, controller.getOrderById);
 
+router.put('/:id', authenticateToken, controller.updateOrderById);
+
 router.post('/', authenticateToken, controller.createOrder);
 
 router.delete('/:id', authenticateToken, controller.deleteOrderById);
