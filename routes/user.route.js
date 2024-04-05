@@ -21,7 +21,7 @@ router.post('/register', upload.single('avatar'), controller.register);
 router.post('/admin', upload.single('avatar'), controller.createAdmin);
 
 // Chỉnh sửa thông tin user
-router.put('/:username', authenticateToken, upload.single('avatar'), controller.updateUser);
+router.put('', authenticateToken, upload.single('avatar'), controller.updateUser);
 
 router.delete('', authenticateToken, controller.deleteUserSelf);
 //Xóa user

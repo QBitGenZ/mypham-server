@@ -21,6 +21,7 @@ dotenv.config();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors());
+app.options('*', cors());
 app.use('/uploads/', express.static(path.join(__dirname, 'uploads')));
 
 //use route
