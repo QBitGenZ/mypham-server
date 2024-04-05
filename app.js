@@ -21,7 +21,11 @@ dotenv.config();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type', 'Accept', 'Content-Length']
+}));
 app.options('*', cors());
 app.use('/uploads/', express.static(path.join(__dirname, 'uploads')));
 
