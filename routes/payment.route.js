@@ -89,7 +89,8 @@ router.get('/vnpay_return', function (req, res, next) {
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-        res.send({status: 'success', code: vnp_Params['vnp_ResponseCode']});
+        // res.send({status: 'success', code: vnp_Params['vnp_ResponseCode']});
+        res.redirect(`${process.env.CLIENT_ROOT}/checkout/success`)
     } else{
         res.send({status: 'success', code: '97'})
     }
