@@ -1,5 +1,5 @@
 function referrerPolicy(req, res, next) {
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Referrer-Policy', 'same-origin');
   next();
 }
 
