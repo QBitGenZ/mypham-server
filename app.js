@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const {corsMiddleware} = require('./middlewares/cors');
 
 const userRoute = require('./routes/user.route');
 const productRoute = require('./routes/product.route');
@@ -31,7 +32,7 @@ app.use(`/${process.env.API_VERSION}/product-types/`, productTypeRoute);
 app.use(`/${process.env.API_VERSION}/feedbacks/`, feedbackRoute);
 app.use(`/${process.env.API_VERSION}/carts/`, cartRoute);
 app.use(`/${process.env.API_VERSION}/orders/`, orderRoute);
-app.use(`/${process.env.API_VERSION}/payments/`, vnpayRoute);
+app.use(`/${process.env.API_VERSION}/payments/`, corsMiddleware, vnpayRoute);
 
 
 // kết nối database
