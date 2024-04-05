@@ -72,7 +72,10 @@ router.get('/vnpay_return', function (req, res, next) {
     delete vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHashType'];
 
+
     vnp_Params = sortObject(vnp_Params);
+
+    console.log(vnp_Params);
      
     let tmnCode = process.env.VNP_TMNCODE;
     let secretKey = process.env.VNP_HASHSECRET;
@@ -86,9 +89,9 @@ router.get('/vnpay_return', function (req, res, next) {
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-        res.send('success', {code: vnp_Params['vnp_ResponseCode']})
+        res.send({status: 'success', code: vnp_Params['vnp_ResponseCode']});
     } else{
-        res.send('success', {code: '97'})
+        res.send({status: 'success', code: '97'})
     }
 });
 
