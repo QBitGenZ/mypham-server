@@ -5,6 +5,7 @@ const {authenticateToken, isAdmin} = require('../middlewares/authentication');
 const upload = multer({ dest: 'uploads/' })
 
 route.get('', controller.getProducts);
+route.get('/brands/:id', controller.getProductByBrand),
 
 route.post('', authenticateToken, isAdmin, upload.array('images'),
   controller.createProduct);

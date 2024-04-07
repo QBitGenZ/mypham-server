@@ -23,7 +23,8 @@ const productSchema = new mongoose.Schema({
     type: String,
   },
   brand: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand',
   },
   description: {
     type: String,

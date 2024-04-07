@@ -8,7 +8,7 @@ module.exports = {
       const page = parseInt(req.query.page || 1);
 
       const query = Product.find().sort({_id: -1})
-        .populate('type').populate('feedbacks');
+        .populate('type').populate('feedbacks').populate('brand');
       const data = await query.skip((page - 1) * limit).limit(limit);
 
       const totalDoc = await Product.countDocuments(); // Sửa lỗi ở đây
@@ -29,11 +29,29 @@ module.exports = {
     }
   },
 
+  getProductByBrand: async (req, res) => {
+    try {
+      const brand = req.params.id;
+
+      const product = await Product.findOne({brand: brand}).populate('feedbacks').populate('brand').populate('type');
+
+      if (!product) {
+        return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
+      }
+
+      // Trả về thông tin của sản phẩm
+      return res.status(200).json({ data: product });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Lỗi server nội bộ' });
+    }
+  },
+
   getProduct: async (req, res) => {
     try {
       const productId = req.params.id;
 
-      const product = await Product.findById(productId).populate('feedbacks');
+      const product = await Product.findById(productId).populate('feedbacks').populate('brand').populate('type');
 
       if (!product) {
         return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });

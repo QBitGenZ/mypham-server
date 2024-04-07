@@ -14,6 +14,7 @@ const feedbackRoute = require('./routes/feedback.route');
 const cartRoute = require('./routes/cart.route');
 const orderRoute = require('./routes/order.route');
 const vnpayRoute = require('./routes/payment.route');
+const brandRoute = require('./routes/brand.route');
 
 const app = express();
 
@@ -36,7 +37,9 @@ app.use(`/${process.env.API_VERSION}/product-types/`, productTypeRoute);
 app.use(`/${process.env.API_VERSION}/feedbacks/`, feedbackRoute);
 app.use(`/${process.env.API_VERSION}/carts/`, cartRoute);
 app.use(`/${process.env.API_VERSION}/orders/`, orderRoute);
+app.use(`/${process.env.API_VERSION}/brands/`, brandRoute);
 app.use(`/${process.env.API_VERSION}/payments/`, referrerPolicy, vnpayRoute);
+
 
 
 // kết nối database
