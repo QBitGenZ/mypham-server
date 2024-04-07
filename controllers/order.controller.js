@@ -1,5 +1,6 @@
 const Order = require('../models/order'); 
 const validate = require('../validations/order');
+const Product = require('../models/Product');
 
 exports.getAllOrdersByAdmin = async (req, res) => {
   try {
@@ -65,7 +66,20 @@ exports.createOrder = async (req, res) => {
       user, paymentMethod, deliveryMethod, address, items
     });
 
-    await newOrder.save();
+
+    for(const item of items) {
+      const product = await Product.findById(item.product)
+      if(!product) {
+        return res.status(404).send({error: 'Không tìm thấy sản phẩm'})
+      }
+      if (product.quantity < item.quantity) {
+        return res.status(400).json({ error: 'Số lượng sản phẩm không đủ' });
+      }
+      product.quantity -= item.quantity
+
+      
+      await newOrder.save();
+    }
 
     // Lấy thông tin của người dùng và sản phẩm sau khi đơn hàng đã được lưu
     const populatedOrder = await Order.findById(newOrder._id).populate('user').populate('items.product');
