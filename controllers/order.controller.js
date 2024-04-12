@@ -95,11 +95,14 @@ exports.updateOrderById = async (req, res) => {
   const orderId = req.params.id;
   const orderData = req.body;
   orderData.user = req.user._id;
+  console.log("body", req.body)
 
   try {
     const order = await Order.findById(orderId)
     if(!order)
       return res.status(404).send({'error': 'Không tồn tại sản phẩm'})
+
+    console.log(req.body)
 
     order.paymentMethod = orderData.paymentMethod || order.paymentMethod;
     order.deliveryMethod = orderData.deliveryMethod || order.deliveryMethod;
