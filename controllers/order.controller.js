@@ -97,8 +97,19 @@ exports.updateOrderById = async (req, res) => {
   orderData.user = req.user._id;
 
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(orderId, orderData, { new: true }).populate('user').populate('items.product');
-    if (!updatedOrder) return res.status(404).json({ error: 'Không tìm thấy' });
+    const order = await Order.findById(orderId)
+    if(!order)
+      return res.status(404).send({'error': 'Không tồn tại sản phẩm'})
+
+    order.paymentMethod = orderData.paymentMethod || order.paymentMethod;
+    order.deliveryMethod = orderData.deliveryMethod || order.deliveryMethod;
+    order.address = orderData.address || order.address;
+    order.items = orderData.items || order.items;
+    order.status = orderData.status || order.status;
+
+    const updatedOrder = await order.save();
+    updateOrder = updateOrder.populate('user').populate('items.product');
+
     res.json(updatedOrder);
   } catch (error) {
     res.status(500).send({ error: 'Lỗi nội bộ' });

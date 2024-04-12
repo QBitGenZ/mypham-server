@@ -178,6 +178,7 @@ module.exports = {
       existUser.phone = req.body.phone || existUser.phone;
       existUser.email = req.body.email || existUser.email;
       existUser.birthday = req.body.birthday || existUser.birthday;
+      console.log(req.body)
 
       if(req.body.password) {
         const salt = await bcrypt.genSalt(10);
@@ -197,6 +198,7 @@ module.exports = {
 
     }
     catch (e) {
+      console.log(e)
       return res.status(400).send({e});
     }
   },
