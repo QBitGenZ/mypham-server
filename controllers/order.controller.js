@@ -109,9 +109,13 @@ exports.updateOrderById = async (req, res) => {
 
     const updatedOrder = await order.save();
     console.log('Đã save')
-    await updatedOrder.populate('user').populate('items.product').execPopulate();
-
-    res.json(updatedOrder);
+    // Tạo một truy vấn Mongoose mới và sử dụng populate trên đó
+    const populatedOrder = await Order.findById(orderId)
+      .populate('user')
+      .populate('items.product')
+      .exec();
+    
+    res.json(populatedOrder);
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: 'Lỗi nội bộ' });
