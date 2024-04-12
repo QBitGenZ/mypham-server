@@ -40,7 +40,7 @@ exports.updateCartItem = async (req, res) => {
     if (itemIndex === -1) {
       return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
     }
-
+    
     const updatedItem = req.body;
     cart.items[itemIndex].quantity = updatedItem.quantity;
 
@@ -48,6 +48,7 @@ exports.updateCartItem = async (req, res) => {
     await cart.save();
     res.status(200).json(cart);
   } catch (error) {
+    print(error)
     res.status(500).json({ error: 'Lỗi nội bộ' });
   }
 };
@@ -59,7 +60,7 @@ exports.deleteCartItem = async (req, res) => {
     const itemIndex = cart.items.findIndex(item => item._id.equals(req.params.id));
 
     if (itemIndex === -1) {
-      return res.status(404).json({ error: 'Khoong timg thấy sản phẩm' });
+      return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
     }
 
     cart.items.splice(itemIndex, 1);
