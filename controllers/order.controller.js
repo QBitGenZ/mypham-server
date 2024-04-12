@@ -109,7 +109,7 @@ exports.updateOrderById = async (req, res) => {
 
     const updatedOrder = await order.save();
     console.log('Đã save')
-    updateOrder = updateOrder.populate('user').populate('items.product');
+    updatedOrder = updatedOrder.populate('user').populate('items.product');
 
     res.json(updatedOrder);
   } catch (error) {
