@@ -108,10 +108,12 @@ exports.updateOrderById = async (req, res) => {
     order.status = orderData.status || order.status;
 
     const updatedOrder = await order.save();
+    console.log('Đã save')
     updateOrder = updateOrder.populate('user').populate('items.product');
 
     res.json(updatedOrder);
   } catch (error) {
+    console.log(error)
     res.status(500).send({ error: 'Lỗi nội bộ' });
   }
 };
