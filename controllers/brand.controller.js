@@ -9,7 +9,7 @@ module.exports = {
       const query = Brand.find().sort({_id: -1});
       const data = await query.skip((page - 1) * limit).limit(limit);
   
-      const totalDoc = await Order.countDocuments(); // Sửa lỗi ở đây
+      const totalDoc = await Brand.countDocuments(); // Sửa lỗi ở đây
       const totalPage = Math.ceil(totalDoc / limit);
   
       return res.status(200).json({
