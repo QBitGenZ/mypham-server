@@ -58,7 +58,7 @@ const productSchema = new mongoose.Schema({
   ],
   sale: {
     type: Number,
-  }
+  },
 });
 
 module.exports = mongoose.model('Product', productSchema);

@@ -104,6 +104,9 @@ module.exports = {
       const salt = await bcrypt.genSalt(10);
       const hashPass = await bcrypt.hash(req.body.password, salt);
 
+      const defaultBirthday = new Date()
+      defaultBirthday.setFullYear(defaultBirthday.getFullYear() - 18)
+
       const user = new User({
         username: req.body.username,
         password: hashPass,
@@ -112,7 +115,8 @@ module.exports = {
         avatar: req?.file?.path || null,
         email: req.body.email,
         phone: req.body.phone,
-        birthday: req.body.birthday || Date.now(),
+        birthday: req.body.birthday || defaultBirthday,
+        gender: req.body.gender,
       });
 
       const userCreated = await user.save(); // Lưu người dùng vào cơ sở dữ liệu

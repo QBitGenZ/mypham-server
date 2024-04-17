@@ -17,4 +17,6 @@ route.delete('/:id',authenticateToken, isAdmin, controller.deleteProduct);
 
 route.get('/:id', authenticateToken, controller.getProduct)
 
+route.get('/search', controller.searchProducts);
+
 module.exports = route;

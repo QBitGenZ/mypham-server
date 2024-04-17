@@ -58,12 +58,12 @@ exports.createOrder = async (req, res) => {
     return res.status(400).send({ error: error });
   }
 
-  const { paymentMethod, deliveryMethod, address, items } = orderData;
+  const { paymentMethod, deliveryMethod, address, items, totalPrice } = orderData;
   const user = req.user._id;
 
   try {
     const newOrder = new Order({
-      user, paymentMethod, deliveryMethod, address, items
+      user, paymentMethod, deliveryMethod, address, items, totalPrice
     });
 
 

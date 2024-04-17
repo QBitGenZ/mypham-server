@@ -1,3 +1,4 @@
+const { boolean } = require('joi');
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema({
@@ -40,6 +41,13 @@ const orderSchema = new mongoose.Schema({
   status: {
     type: String,
     default: 'Chờ xác nhận'
+  },
+  totalPrice: {
+    type: Number,
+  },
+  paymentDate: {
+    type: Date,
+    default: null
   }
 })
 

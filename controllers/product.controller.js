@@ -70,15 +70,11 @@ module.exports = {
       // Validate product data
       req.body.tags = JSON.parse(req.body.tags)
       delete req.body.images;
-      console.log(1, req.files);
 
       const { error } = ProductValidate(req.body);
       if (error) {
         return res.status(400).send({ 'error': error.details[0].message });
       }
-
-
-      
 
       // Process uploaded images
       const images = req?.files?.map(file => file.path);
@@ -159,10 +155,28 @@ module.exports = {
         return res.status(404).send({ 'error': 'Không tìm thấy sản phẩm' });
       }
 
-      return res.status(204).send(); // Trả về mã status 204 (No Content) khi xóa thành công
+      return res.status(204).send(); 
     } catch (error) {
       console.error(error);
       return res.status(500).send({ 'error': 'Lỗi nội bộ' });
     }
-  }
+  },
+
+  searchProducts: async (req, res) => {
+    try {
+      const keyword = req.query.keyword;
+
+      const searchResult = await Product.find({
+        $or: [
+          { name: { $regex: new RegExp(keyword, 'i') } }, 
+          { 'type.name': { $regex: new RegExp(keyword, 'i') } }, 
+          { 'brand.name': { $regex: new RegExp(keyword, 'i') } } 
+        ]
+      });
+
+      res.status(200).json({ data: searchResult });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 }
