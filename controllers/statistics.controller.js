@@ -5,19 +5,13 @@ const Order = require('../models/Order');
 module.exports = {
   getRevenueByMonth: async (req, res) => {
     try {
-      const { startDate, endDate } = req.query;
+      let { startDate, endDate } = req.query;
 
-      const start = new Date(startDate);
-      const end = new Date(endDate);
+      const start = startDate ? new Date(startDate) : new Date();
+      const end = endDate ? new Date(endDate) : new Date();
 
-      if (!start) {
-        start = new Date();
-        start.setMonth(start.getMonth() - 12);
-        start.setDate(1);
-      }
-
-      if (!end) {
-        end = new Date();
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return res.status(400).json({ error: 'Invalid date format' });
       }
 
       const orders = await Order.find({
