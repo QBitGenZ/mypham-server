@@ -1,4 +1,4 @@
-const Order = require('../models/order'); 
+const Order = require('../models/Order'); 
 const validate = require('../validations/order');
 const Product = require('../models/Product');
 

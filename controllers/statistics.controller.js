@@ -1,5 +1,6 @@
-const Order = require('../controllers/order.controller');
 const Product = require('../models/Product');
+const Order = require('../models/Order');
+
 
 module.exports = {
   getRevenueByMonth: async (req, res) => {
