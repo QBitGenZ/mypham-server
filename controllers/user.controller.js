@@ -107,6 +107,7 @@ module.exports = {
       const defaultBirthday = new Date()
       defaultBirthday.setFullYear(defaultBirthday.getFullYear() - 18)
 
+
       const user = new User({
         username: req.body.username,
         password: hashPass,
@@ -115,7 +116,7 @@ module.exports = {
         avatar: req?.file?.path || null,
         email: req.body.email,
         phone: req.body.phone,
-        birthday: req.body.birthday || defaultBirthday,
+        birthday: new Date(req.body.birthday) || defaultBirthday,
         gender: req.body.gender,
       });
 
@@ -173,7 +174,7 @@ module.exports = {
 
       const existUser = await User.findOne({username: username});
       if(!existUser)
-        return res.status(404).body({'error': 'Không tìm thấy người dùng'});
+        return res.status(404).send({'error': 'Không tìm thấy người dùng'});
 
       console.log(existUser)
 
@@ -211,7 +212,7 @@ module.exports = {
     try {
       const username = req.params.username;
 
-      existUser = User.findOne({username: username});
+      existUser = await User.findOne({username: username});
       if (!existUser)
         return res.status(404).send({error: 'Người dùng không tồn tại'})
 
@@ -228,7 +229,7 @@ module.exports = {
     try {
       const username = req.user.username
 
-      const existUser = User.findOne({username: username});
+      const existUser = await User.findOne({username: username});
       if (!existUser)
         return res.status(404).send({error: 'Người dùng không tồn tại'})
 
