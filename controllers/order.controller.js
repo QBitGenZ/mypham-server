@@ -110,6 +110,10 @@ exports.updateOrderById = async (req, res) => {
     order.items = orderData.items || order.items;
     order.status = orderData.status || order.status;
 
+    if(orderData.status === 'Đã giao' && order.paymentMethod === 'cod') {
+      order.paymentDate = Date.now();
+    } 
+
     const updatedOrder = await order.save();
     console.log('Đã save')
     // Tạo một truy vấn Mongoose mới và sử dụng populate trên đó
