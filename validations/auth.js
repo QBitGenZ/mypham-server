@@ -5,7 +5,7 @@ const registerValidator = (data) => {
     username: Joi.string().min(5).max(255).required(),
     password: Joi.string().min(8).max(255).required(),
     fullname: Joi.string().min(6).max(255).required(),
-    birthday: Joi.date().max('now').iso().required().raw()
+    birthday: Joi.date().max('now').required().raw()
       .less('18 years')
       .messages({
         'date.base': 'Ngày sinh phải là một ngày hợp lệ.',
