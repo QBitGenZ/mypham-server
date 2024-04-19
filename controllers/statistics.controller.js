@@ -40,7 +40,18 @@ module.exports = {
             revenueByMonth[monthYearKey] += order.totalPrice || 0;
         });
 
-        res.status(200).json({ data: revenueByMonth });
+        const sortedMonths = Object.keys(revenueByMonth).sort((a, b) => {
+          const [aMonth, aYear] = a.split('-').map(Number);
+          const [bMonth, bYear] = b.split('-').map(Number);
+          return aYear === bYear ? aMonth - bMonth : aYear - bYear;
+        });
+
+        const sortedRevenueByMonth = {};
+        sortedMonths.forEach(month => {
+            sortedRevenueByMonth[month] = revenueByMonth[month];
+        });
+
+        res.status(200).json({ data: sortedRevenueByMonth });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
