@@ -7,7 +7,7 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     const limit = parseInt(req.query.limit || 10);
     const page = parseInt(req.query.page || 1);
 
-    const query = Order.find().sort({_id: -1}).populate('user').populate('items.product').populate('items.product.brand');
+    const query = Order.find().sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
     const data = await query.skip((page - 1) * limit).limit(limit);
 
     const totalDoc = await Order.countDocuments(); // Sửa lỗi ở đây
@@ -30,7 +30,7 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id }).populate('user').populate('items.product').populate('items.product.brand');
+    const orders = await Order.find({ user: req.user._id }).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
     return res.status(200).send({ data: orders });
   } catch (error) {
     console.error(error.message);

@@ -11,7 +11,7 @@ const orderJoiSchema = Joi.object({
   address: Joi.string().required(),
   items: Joi.array().items(orderItemJoiSchema).required(),
   status: Joi.string().optional(),
-  totalPrice: Joi.string().required(),
+  totalPrice: Joi.number().required(),
 });
 
 function validateOrder(order) {
