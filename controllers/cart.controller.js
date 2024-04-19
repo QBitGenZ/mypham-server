@@ -3,7 +3,7 @@ const Cart = require('../models/Cart');
 // Lấy giỏ hàng của người dùng
 exports.getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
+    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product').populate('items.product.brand');
     res.status(200).send({data: cart});
   } catch (error) {
     res.status(500).json({ error: 'Lỗi nội bộ' });
