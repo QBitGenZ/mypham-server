@@ -5,35 +5,44 @@ const Order = require('../models/Order');
 module.exports = {
   getRevenueByMonth: async (req, res) => {
     try {
-      let { startDate, endDate } = req.query;
+        let { startDate, endDate } = req.query;
 
-      const defaultStart = new Date();
-      defaultStart.setMonth(defaultStart.getMonth() - 11);
+        const defaultStart = new Date();
+        defaultStart.setMonth(defaultStart.getMonth() - 11);
 
-      const start = startDate ? new Date(startDate) : defaultStart;
-      const end = endDate ? new Date(endDate) : new Date();
+        const start = startDate ? new Date(startDate) : defaultStart;
+        const end = endDate ? new Date(endDate) : new Date();
 
-      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-        return res.status(400).json({ error: 'Invalid date format' });
-      }
-
-      const orders = await Order.find({
-        paymentDate: { $gte: start, $lte: end }
-      });
-
-      const revenueByMonth = {};
-
-      orders.forEach(order => {
-        const monthYearKey = `${order.paymentDate.getMonth() + 1}-${order.paymentDate.getFullYear()}`;
-        if (revenueByMonth[monthYearKey]) {
-          revenueByMonth[monthYearKey] += order.totalPrice || 0;
-        } else {
-          revenueByMonth[monthYearKey] = order.totalPrice || 0;
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            return res.status(400).json({ error: 'Invalid date format' });
         }
-      });
-      res.status(200).json({ data: revenueByMonth });
+
+        const orders = await Order.find({
+            paymentDate: { $gte: start, $lte: end }
+        });
+
+        const revenueByMonth = {};
+        const monthsInRange = [];
+
+        let currentDate = new Date(start);
+
+        while (currentDate <= end) {
+            monthsInRange.push(`${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`);
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+
+        monthsInRange.forEach(monthYearKey => {
+            revenueByMonth[monthYearKey] = 0;
+        });
+
+        orders.forEach(order => {
+            const monthYearKey = `${order.paymentDate.getMonth() + 1}-${order.paymentDate.getFullYear()}`;
+            revenueByMonth[monthYearKey] += order.totalPrice || 0;
+        });
+
+        res.status(200).json({ data: revenueByMonth });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
   },
 
