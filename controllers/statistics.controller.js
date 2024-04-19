@@ -7,7 +7,10 @@ module.exports = {
     try {
       let { startDate, endDate } = req.query;
 
-      const start = startDate ? new Date(startDate) : new Date();
+      const defaultStart = new Date();
+      defaultStart.setMonth(defaultStart.getMonth() - 11);
+
+      const start = startDate ? new Date(startDate) : defaultStart;
       const end = endDate ? new Date(endDate) : new Date();
 
       if (isNaN(start.getTime()) || isNaN(end.getTime())) {
