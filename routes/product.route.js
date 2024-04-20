@@ -11,10 +11,10 @@ route.get('/video/:id', controller.streamVideo);
 
 route.get('/brands/:id', controller.getProductByBrand),
 
-route.post('', authenticateToken, isAdmin, upload.array('images'), upload.single('video'),
+route.post('', authenticateToken, isAdmin, upload.fields([{ name: 'images', maxCount: 10 }, { name: 'video', maxCount: 1 }]),
   controller.createProduct);
 
-route.put('/:id', authenticateToken, isAdmin, upload.array('images'), upload.single('video'),
+route.put('/:id', authenticateToken, isAdmin, upload.fields([{ name: 'images', maxCount: 10 }, { name: 'video', maxCount: 1 }]),
   controller.updateProduct);
 
 route.delete('/:id',authenticateToken, isAdmin, controller.deleteProduct);
