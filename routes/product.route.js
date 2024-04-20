@@ -6,7 +6,7 @@ const upload = multer({ dest: 'uploads/' })
 
 route.get('', controller.getProducts);
 
-route.get('admin/', authenticateToken, isAdmin, controller.getProductsByAdmin);
+route.get('/admin/', authenticateToken, isAdmin, controller.getProductsByAdmin);
 
 route.get('/search', controller.searchProducts);
 
