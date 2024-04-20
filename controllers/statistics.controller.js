@@ -127,7 +127,9 @@ module.exports = {
         .populate('type').populate('feedbacks').populate('brand');
       const data = await query.skip((page - 1) * limit).limit(limit);
 
-      const totalDoc = await query.countDocuments(); 
+      const totalDoc = await Product.countDocuments( {
+        expiryDate: { $lt: currentDate }
+      }); 
       const totalPage = Math.ceil(totalDoc / limit);
 
       return res.status(200).json({
