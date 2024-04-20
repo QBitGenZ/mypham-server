@@ -77,8 +77,8 @@ module.exports = {
       }
 
       // Process uploaded images
-      const images = req?.files?.map(file => file.path);
-      const videoUrl = req?.file?.path;
+      const images = req.files.images.map(file => file.path);
+      const videoUrl = req.files.video ? req.files.video[0].path : '';
 
       // Extract other product data
       const {
@@ -107,8 +107,8 @@ module.exports = {
       // Extract product ID from request parameters
       const productId = req.params.id;
 
-      const images = req?.files?.map(file => file.path);
-      const videoUrl = req?.file?.path;
+      const images = req.files.images.map(file => file.path);
+      const videoUrl = req.files.video ? req.files.video[0].path : '';
 
       // Find the product by ID
       const product = await Product.findById(productId);
