@@ -17,6 +17,7 @@ const productValidationSchema = Joi.object({
   feedbacks: Joi.array().items(Joi.string()).optional(),
   brand: Joi.string().optional(),
   sale: Joi.number().optional(),
+  videoUrl: Joi.string().optional(),
 });
 
 const validateProduct = (productData) => {

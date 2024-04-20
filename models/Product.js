@@ -59,6 +59,7 @@ const productSchema = new mongoose.Schema({
   sale: {
     type: Number,
   },
+  videoUrl: String,
 });
 
 module.exports = mongoose.model('Product', productSchema);

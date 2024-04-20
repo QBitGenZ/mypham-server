@@ -78,6 +78,7 @@ module.exports = {
 
       // Process uploaded images
       const images = req?.files?.map(file => file.path);
+      const videoUrl = req?.file?.path;
 
       // Extract other product data
       const {
@@ -88,7 +89,7 @@ module.exports = {
       // Create new product instance
       const product = new Product({
         name, type, origin, volume, weight, utility, description,
-        price, cost, quantity, tags, images, productionDate, expiryDate, brand
+        price, cost, quantity, tags, images, productionDate, expiryDate, brand, videoUrl
       });
 
       // Save the product to the database
@@ -107,6 +108,7 @@ module.exports = {
       const productId = req.params.id;
 
       const images = req?.files?.map(file => file.path);
+      const videoUrl = req?.file?.path;
 
       // Find the product by ID
       const product = await Product.findById(productId);
@@ -131,6 +133,7 @@ module.exports = {
       product.expiryDate = req.body.expiryDate || product.expiryDate;
       product.feedbacks = req.body.feedbacks || product.feedbacks;
       product.brand = req.body.brand || product.brand;
+      product.videoUrl = videoUrl || product.videoUrl;
 
       // Save the updated product to the database
       const updatedProduct = await product.save();
@@ -177,6 +180,29 @@ module.exports = {
       res.status(200).json({ data: searchResult });
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  },
+
+  streamVideo: async (req, res) => {
+    try {
+      const productId = req.params.id;
+      const product = await Product.findById(productId);
+
+      if (!product || !product.videoUrl) {
+        return res.status(404).json({ error: 'Không tìm thấy video' });
+      }
+
+      const videoPath = product.videoUrl; 
+
+      if (!fs.existsSync(videoPath)) {
+        return res.status(404).json({ error: 'Video không tồn tại' });
+      }
+
+      res.set('content-type', 'video/mp4');
+      fs.createReadStream(videoPath).pipe(res);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error });
     }
   },
 }

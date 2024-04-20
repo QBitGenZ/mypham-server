@@ -112,4 +112,36 @@ module.exports = {
     }
   },
 
+  getExpiredProducts: async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit || 10);
+      const page = parseInt(req.query.page || 1);
+
+      const currentDate = new Date();
+
+      const query = Product.find(
+        {
+          expiryDate: { $lt: currentDate }
+        }
+      ).sort({_id: -1})
+        .populate('type').populate('feedbacks').populate('brand');
+      const data = await query.skip((page - 1) * limit).limit(limit);
+
+      const totalDoc = await Product.countDocuments(); 
+      const totalPage = Math.ceil(totalDoc / limit);
+
+      return res.status(200).json({
+        data,
+        meta: {
+          page,
+          limit,
+          totalDoc,
+          totalPage,
+        }
+      });
+    } catch (error) {
+      console.error(error); 
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  },
 }
