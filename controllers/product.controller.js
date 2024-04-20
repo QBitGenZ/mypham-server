@@ -170,7 +170,7 @@ module.exports = {
         $or: [
           { name: { $regex: new RegExp(keyword, 'i') } }, 
           { 'type.name': { $regex: new RegExp(keyword, 'i') } }, 
-          { 'brand.name': { $regex: new RegExp(keyword, 'i') } } 
+          { 'brand.name': { $regex: new RegExp(keyword, 'i') } },
         ]
       });
 
