@@ -79,7 +79,6 @@ exports.createOrder = async (req, res) => {
       await product.save()
     }
     await newOrder.save();
-    // Lấy thông tin của người dùng và sản phẩm sau khi đơn hàng đã được lưu
     const populatedOrder = await Order.findById(newOrder._id).populate('user').populate('items.product');
 
     return res.status(201).json({ data: populatedOrder });
