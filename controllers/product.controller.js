@@ -172,7 +172,7 @@ module.exports = {
           { 'type.name': { $regex: new RegExp(keyword, 'i') } }, 
           { 'brand.name': { $regex: new RegExp(keyword, 'i') } },
         ]
-      });
+      }).populate('type');
 
       res.status(200).json({ data: searchResult });
     } catch (error) {
