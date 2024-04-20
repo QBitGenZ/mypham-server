@@ -7,6 +7,34 @@ module.exports = {
       const limit = parseInt(req.query.limit || 10);
       const page = parseInt(req.query.page || 1);
 
+      const currentDate = new Date();
+      const query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({_id: -1})
+        .populate('type').populate('feedbacks').populate('brand');
+      const data = await query.skip((page - 1) * limit).limit(limit);
+
+      const totalDoc = await Product.countDocuments(); // Sửa lỗi ở đây
+      const totalPage = Math.ceil(totalDoc / limit);
+
+      return res.status(200).json({
+        data,
+        meta: {
+          page,
+          limit,
+          totalDoc,
+          totalPage,
+        }
+      });
+    } catch (error) {
+      console.error(error); // Log lỗi ra console để debug
+      return res.status(500).json({ error: 'Internal server error' }); // Trả về lỗi 500 nếu có lỗi xảy ra
+    }
+  },
+
+  getProductsByAdmin: async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit || 10);
+      const page = parseInt(req.query.page || 1);
+
       const query = Product.find().sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
       const data = await query.skip((page - 1) * limit).limit(limit);
@@ -33,13 +61,12 @@ module.exports = {
     try {
       const brand = req.params.id;
 
-      const product = await Product.findOne({brand: brand}).populate('feedbacks').populate('brand').populate('type');
+      const product = await Product.findOne({brand: brand, expiryDate: { $gte: currentDate }, quantity: { $gt: 0 }}).populate('feedbacks').populate('brand').populate('type');
 
       if (!product) {
         return res.status(404).json({ error: 'Không tìm thấy sản phẩm' });
       }
 
-      // Trả về thông tin của sản phẩm
       return res.status(200).json({ data: product });
     } catch (error) {
       console.error(error);

@@ -5,6 +5,9 @@ const {authenticateToken, isAdmin} = require('../middlewares/authentication');
 const upload = multer({ dest: 'uploads/' })
 
 route.get('', controller.getProducts);
+
+route.get('admin/', authenticateToken, isAdmin, controller.getProductsByAdmin);
+
 route.get('/search', controller.searchProducts);
 
 route.get('/video/:id', controller.streamVideo);
