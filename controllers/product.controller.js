@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const ProductType = require('../models/ProductType');
+const Brand = require('../models/Brand');
 const ProductValidate = require('../validations/product');
 
 module.exports = {
@@ -6,10 +8,28 @@ module.exports = {
     try {
       const limit = parseInt(req.query.limit || 10);
       const page = parseInt(req.query.page || 1);
+      const type = req.query.type;
+      const brand = req.query.brand;
 
       const currentDate = new Date();
       const query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
+
+      if (type) {
+        const productType = await ProductType.findOne({ name: type });
+        if (productType) {
+          query = query.where('type').equals(productType._id);
+        } 
+      }
+
+      if (brand) {
+        const brandProuct = await Brand.findOne({ name: brand });
+        if(brandProuct) {
+          query = query.where('brand').equals(brand._id);
+        }
+      }
+    
+
       const data = await query.skip((page - 1) * limit).limit(limit);
    
       const totalDoc = await Product.countDocuments({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } });
