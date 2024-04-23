@@ -11,7 +11,7 @@ module.exports = {
       const query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
       const data = await query.skip((page - 1) * limit).limit(limit);
-
+   
       const totalDoc = await Product.countDocuments({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } });
       const totalPage = Math.ceil(totalDoc / limit);
 
@@ -207,29 +207,6 @@ module.exports = {
       res.status(200).json({ data: searchResult });
     } catch (error) {
       res.status(500).json({ error: error.message });
-    }
-  },
-
-  streamVideo: async (req, res) => {
-    try {
-      const productId = req.params.id;
-      const product = await Product.findById(productId);
-
-      if (!product || !product.videoUrl) {
-        return res.status(404).json({ error: 'Không tìm thấy video' });
-      }
-
-      const videoPath = product.videoUrl; 
-
-      if (!fs.existsSync(videoPath)) {
-        return res.status(404).json({ error: 'Video không tồn tại' });
-      }
-
-      res.set('content-type', 'video/mp4');
-      fs.createReadStream(videoPath).pipe(res);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: error });
     }
   },
 }

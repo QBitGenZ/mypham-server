@@ -10,8 +10,6 @@ route.get('/admin', authenticateToken, isAdmin, controller.getProductsByAdmin);
 
 route.get('/search', controller.searchProducts);
 
-route.get('/video/:id', controller.streamVideo);
-
 route.get('/brands/:id', controller.getProductByBrand),
 
 route.post('', authenticateToken, isAdmin, upload.fields([{ name: 'images', maxCount: 10 }, { name: 'video', maxCount: 1 }]),
@@ -22,7 +20,7 @@ route.put('/:id', authenticateToken, isAdmin, upload.fields([{ name: 'images', m
 
 route.delete('/:id',authenticateToken, isAdmin, controller.deleteProduct);
 
-route.get('/:id', authenticateToken, controller.getProduct)
+route.get('/:id', controller.getProduct)
 
 
 
