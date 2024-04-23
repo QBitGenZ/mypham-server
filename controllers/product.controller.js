@@ -12,7 +12,7 @@ module.exports = {
       const brand = req.query.brand;
 
       const currentDate = new Date();
-      const query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({_id: -1})
+      let query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
 
       if (type) {
@@ -23,9 +23,9 @@ module.exports = {
       }
 
       if (brand) {
-        const brandProuct = await Brand.findOne({ name: brand });
-        if(brandProuct) {
-          query = query.where('brand').equals(brand._id);
+        const brandProduct = await Brand.findOne({ name: brand });
+        if(brandProduct) {
+          query = query.where('brand').equals(brandProduct._id);
         }
       }
     
@@ -57,7 +57,7 @@ module.exports = {
       const type = req.query.type;
       const brand = req.query.brand;
 
-      const query = Product.find().sort({_id: -1})
+      let query = Product.find().sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
 
       if (type) {
@@ -68,9 +68,9 @@ module.exports = {
       }
 
       if (brand) {
-        const brandProuct = await Brand.findOne({ name: brand });
-        if(brandProuct) {
-          query = query.where('brand').equals(brand._id);
+        const brandProduct = await Brand.findOne({ name: brand });
+        if(brandProduct) {
+          query = query.where('brand').equals(brandProduct._id);
         }
       }
 
