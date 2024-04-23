@@ -50,6 +50,44 @@ module.exports = {
     }
   },
 
+  getBestSellingProducts: async (req, res) => {
+    try {
+      const completedOrders = await Order.find({ status: 'Đã giao' })
+
+      const productSales = {};
+
+      completedOrders.forEach(order => {
+        order.items.forEach(item => {
+          const productId = item.product.toString();
+          if (productSales[productId]) {
+            productSales[productId] += item.quantity;
+          } else {
+            productSales[productId] = item.quantity;
+          }
+        });
+      });
+
+      const sortedProducts = Object.keys(productSales).sort((a, b) => {
+        return productSales[b] - productSales[a];
+      });
+
+      const topProductsIds = sortedProducts.slice(0, 5);
+
+      const bestSellingProducts = await Promise.all(topProductsIds.map(async productId => {
+        const product = await Product.findById(productId).populate('type').populate('feedbacks').populate('brand');
+        ;;
+        return {
+          product: product,
+          quantitySold: productSales[productId]
+        };
+      }));
+
+      res.status(200).json({ data: bestSellingProducts });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
   getProductsByAdmin: async (req, res) => {
     try {
       const limit = parseInt(req.query.limit || 10);
