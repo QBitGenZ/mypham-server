@@ -57,6 +57,21 @@ module.exports = {
 
       const query = Product.find().sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
+
+      if (type) {
+        const productType = await ProductType.findOne({ name: type });
+        if (productType) {
+          query = query.where('type').equals(productType._id);
+        } 
+      }
+
+      if (brand) {
+        const brandProuct = await Brand.findOne({ name: brand });
+        if(brandProuct) {
+          query = query.where('brand').equals(brand._id);
+        }
+      }
+
       const data = await query.skip((page - 1) * limit).limit(limit);
 
       const totalDoc = await Product.countDocuments(); // Sửa lỗi ở đây
