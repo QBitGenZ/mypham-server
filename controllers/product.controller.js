@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
 const ProductType = require('../models/ProductType');
 const Brand = require('../models/Brand');
+const Order = require('../models/Order');
 const ProductValidate = require('../validations/product');
 
 module.exports = {
