@@ -1,4 +1,4 @@
-const Brand = require('../models/brand')
+const Brand = require('../models/Brand')
 
 module.exports = {
   getBrands: async (req, res) => {
