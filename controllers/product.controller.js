@@ -32,7 +32,7 @@ module.exports = {
 
       const data = await query.skip((page - 1) * limit).limit(limit);
    
-      const totalDoc = await Product.countDocuments({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } });
+      const totalDoc = await Product.countDocuments(query._conditions);
       const totalPage = Math.ceil(totalDoc / limit);
 
       return res.status(200).json({
@@ -54,6 +54,8 @@ module.exports = {
     try {
       const limit = parseInt(req.query.limit || 10);
       const page = parseInt(req.query.page || 1);
+      const type = req.query.type;
+      const brand = req.query.brand;
 
       const query = Product.find().sort({_id: -1})
         .populate('type').populate('feedbacks').populate('brand');
@@ -74,7 +76,7 @@ module.exports = {
 
       const data = await query.skip((page - 1) * limit).limit(limit);
 
-      const totalDoc = await Product.countDocuments(); // Sửa lỗi ở đây
+      const totalDoc = await Product.countDocuments(query._conditions); // Sửa lỗi ở đây
       const totalPage = Math.ceil(totalDoc / limit);
 
       return res.status(200).json({
