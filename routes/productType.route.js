@@ -4,10 +4,12 @@ const {authenticateToken, isAdmin} = require('../middlewares/authentication');
 const multer = require('multer');
 
 route.get('', controller.getProductTypes);
+
 route.post('', authenticateToken, isAdmin,
   controller.createProductType);
 route.put('/:id', authenticateToken, isAdmin,
   controller.updateProductType);
+route.get('/:id', controller.getProductTypeById);
 route.delete('/:id',authenticateToken, isAdmin, controller.deleteProductType);
 
 module.exports = route;
