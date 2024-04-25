@@ -33,10 +33,10 @@ module.exports = {
       const brand = await Brand.findById(brandId)
       
       if(!brand) {
-        return res.status(200).send({error: 'Không tìm thấy nhãn hàng'})
+        return res.status(404).send({error: 'Không tìm thấy nhãn hàng'})
       }
 
-      return res.status(204).send({data: brand});
+      return res.status(200).send({data: brand});
     }
     catch(err) {
       console.log(err)
