@@ -273,7 +273,7 @@ module.exports = {
   
       let productType;
       if (keyword) {
-        productType = await ProductType.findOne({ name: keyword });
+        productType = await ProductType.findOne({ name: { $regex: new RegExp(keyword, 'i') } });
       }
 
       const searchConditions = [];
