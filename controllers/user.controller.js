@@ -277,5 +277,36 @@ module.exports = {
     const existUser = await User.findOne({username: username});
 
     return res.status(200).send({data: existUser});
-  }
+  },
+
+  updatePassword: async (req, res) => {
+    try {
+      const username = req.user.username; // Lấy tên đăng nhập của người dùng từ request
+  
+      const { oldPassword, newPassword } = req.body; // Lấy mật khẩu cũ và mật khẩu mới từ request body
+  
+      const existUser = await User.findOne({ username: username }); // Tìm người dùng trong cơ sở dữ liệu
+  
+      if (!existUser) {
+        return res.status(404).send({ error: 'Người dùng không tồn tại' });
+      }
+  
+      const isPasswordValid = await bcrypt.compare(oldPassword, existUser.password);
+  
+      if (!isPasswordValid) {
+        return res.status(401).send('Mật khẩu cũ không chính xác');
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+  
+      existUser.password = hashedNewPassword;
+      await existUser.save();
+  
+      return res.status(200).send({ data: 'Mật khẩu đã được thay đổi thành công' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ error: 'Lỗi nội bộ' });
+    }
+  },
 }
