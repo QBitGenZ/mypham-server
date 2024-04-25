@@ -267,25 +267,34 @@ module.exports = {
       return res.status(500).send({ 'error': 'Lỗi nội bộ' });
     }
   },
-
   searchProducts: async (req, res) => {
     try {
       const keyword = req.query.keyword;
+  
+      let productType;
+      if (keyword) {
+        productType = await ProductType.findOne({ name: keyword });
+      }
 
-      const productType = await ProductType.findOne({ name: keyword });
-
+      const searchConditions = [];
+      if (keyword) {
+        searchConditions.push(
+          { name: { $regex: new RegExp(keyword, 'i') } },
+          { 'brand.name': { $regex: new RegExp(keyword, 'i') } }
+        );
+        if (productType) {
+          searchConditions.push({ type: productType._id });
+        }
+      }
+  
       const searchResult = await Product.find({
-        $or: [
-          { name: { $regex: new RegExp(keyword, 'i') } }, 
-          { 'brand.name': { $regex: new RegExp(keyword, 'i') } },
-          { type : productType }
-        ]
+        $or: searchConditions.length ? searchConditions : [{}] 
       }).populate('type').populate('brand');
-
-
+  
       res.status(200).json({ data: searchResult });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
+  
 }
