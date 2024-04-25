@@ -100,12 +100,10 @@ module.exports = {
     try {
       const productTypeId = req.params.id;
 
-      const existingProductType = await ProductType.findById(productTypeId);
+      const existingProductType = await ProductType.findByIdAndDelete(productTypeId);
       if (!existingProductType) {
         return res.status(404).json({ error: 'Không tìm thấy loại sản phẩm' });
       }
-
-      await existingProductType.remove();
 
       return res.status(204).send();
     } catch (error) {

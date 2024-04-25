@@ -272,13 +272,16 @@ module.exports = {
     try {
       const keyword = req.query.keyword;
 
+      const productType = await ProductType.findOne({ name: keyword });
+
       const searchResult = await Product.find({
         $or: [
           { name: { $regex: new RegExp(keyword, 'i') } }, 
-          { 'type.name': { $regex: new RegExp(keyword, 'i') } }, 
           { 'brand.name': { $regex: new RegExp(keyword, 'i') } },
+          { type : productType }
         ]
-      }).populate('type');
+      }).populate('type').populate('brand');
+
 
       res.status(200).json({ data: searchResult });
     } catch (error) {
