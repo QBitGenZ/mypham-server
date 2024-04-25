@@ -27,6 +27,23 @@ module.exports = {
     }
   },
 
+  getBrandById: async (req, res) => {
+    const brandId = req.params.id;
+    try{
+      const brand = await Brand.findById(brandId)
+      
+      if(!brand) {
+        return res.status(200).send({error: 'Không tìm thấy nhãn hàng'})
+      }
+
+      return res.status(204).send({data: brand});
+    }
+    catch(err) {
+      console.log(err)
+      res.status(500).send({ error: err });
+    }
+  },
+
   createBrand: async (req, res) => {
     const {name, text} =  req.body
     try {

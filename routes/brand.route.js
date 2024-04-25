@@ -7,6 +7,7 @@ const { authenticateToken,isAdmin } = require('../middlewares/authentication');
 router.get('/', controller.getBrands);
 router.post('/', authenticateToken, isAdmin, validateBrand, controller.createBrand);
 router.put('/:id', authenticateToken, isAdmin, controller.updateBrand );
+router.get('/:id', controller.getBrandById);
 router.delete('/:id', authenticateToken, isAdmin, controller.deleteBrand);
 
 module.exports = router
