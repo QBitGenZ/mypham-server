@@ -35,7 +35,7 @@ module.exports = {
     try {
       const productTypeId = req.params.id;
 
-      const data = ProductType.findOne({_id: productTypeId}).populate('products');
+      const data = await ProductType.findOne({_id: productTypeId}).populate('products');
 
       if(!data) {
         return res.status(404)
