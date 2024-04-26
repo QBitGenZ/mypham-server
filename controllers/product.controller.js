@@ -192,7 +192,7 @@ module.exports = {
       // Create new product instance
       const product = new Product({
         name, type, origin, volume, weight, utility, description,
-        price, cost, quantity, tags, images, productionDate, expiryDate, brand, videoUrl
+        price, cost, quantity, tags, images, productionDate, expiryDate, brand, videoUrl, sale: 0
       });
 
       // Save the product to the database
@@ -237,6 +237,7 @@ module.exports = {
       product.feedbacks = req.body.feedbacks || product.feedbacks;
       product.brand = req.body.brand || product.brand;
       product.videoUrl = videoUrl || product.videoUrl;
+      product.sale = req.body.sale || product.sale;
 
       // Save the updated product to the database
       const updatedProduct = await product.save();
