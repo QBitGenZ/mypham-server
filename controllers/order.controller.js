@@ -20,7 +20,6 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     
 
     const data = await query.skip((page - 1) * limit).limit(limit);
-    console.log(data)
 
     const totalDoc = await Order.countDocuments(query._conditions); // Sửa lỗi ở đây
     const totalPage = Math.ceil(totalDoc / limit);
