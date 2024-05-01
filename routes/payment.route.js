@@ -9,6 +9,7 @@ const request = require('request');
 const moment = require('moment');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 
 
 router.post('/create_payment_url', function (req, res, next) {
@@ -105,6 +106,12 @@ router.get('/vnpay_return', async function (req, res, next) {
                 await cart.save();
             }
             
+            for(const item of order.items) {
+                const product = await Product.findById(item.product)
+                product.quantity -= item.quantity
+                await product.save()
+            }
+
 
             res.redirect(`${process.env.CLIENT_ROOT}/checkout/success`)
         }

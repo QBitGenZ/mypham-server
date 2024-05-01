@@ -1,6 +1,7 @@
 const Order = require('../models/Order'); 
 const validate = require('../validations/order');
 const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 
 exports.getAllOrdersByAdmin = async (req, res) => {
   try {
@@ -78,7 +79,6 @@ exports.createOrder = async (req, res) => {
       user, paymentMethod, deliveryMethod, address, items, totalPrice
     });
 
-
     for(const item of items) {
       const product = await Product.findById(item.product)
       if(!product) {
@@ -87,9 +87,26 @@ exports.createOrder = async (req, res) => {
       if (product.quantity < item.quantity) {
         return res.status(400).json({ error: 'Số lượng sản phẩm không đủ' });
       }
-      product.quantity -= item.quantity
-      await product.save()
+      if(paymentMethod === 'cod') {
+        product.quantity -= item.quantity
+        await product.save()
+      }
     }
+
+    if(paymentMethod === 'cod') {
+      let cart = await Cart.findOne({user: user})
+            console.log(cart)
+            if (cart) {
+                for (let item of items) {
+                    let cartItem = cart.items.find(cartItem => cartItem.product.toString() === item.product.toString());
+                    if (cartItem) {
+                        cartItem.quantity -= item.quantity;
+                    }
+                }
+                await cart.save();
+            }
+    }
+
     await newOrder.save();
     const populatedOrder = await Order.findById(newOrder._id).populate('user').populate('items.product');
 
