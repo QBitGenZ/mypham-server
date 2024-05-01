@@ -8,10 +8,10 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     const page = parseInt(req.query.page || 1);
     const status = req.query.status;
 
-    let query = await Order.find();
+    let query = Order.find();
 
     if(status && status != 'all') {
-      query = await query.find({status: status})
+      query = query.find({status: status})
       console.log(status, query)
     }
 
