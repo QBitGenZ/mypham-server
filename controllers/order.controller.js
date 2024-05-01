@@ -12,15 +12,15 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
     if(status && status != 'all') {
       query = query.find({status: status})
-      console.log(status, query)
+      console.log(status)
     }
 
-    query = await query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
+    query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
 
-    console.log(query)
+    
 
     const data = await query.skip((page - 1) * limit).limit(limit);
-
+    console.log(data)
 
     const totalDoc = await Order.countDocuments(); // Sửa lỗi ở đây
     const totalPage = Math.ceil(totalDoc / limit);
