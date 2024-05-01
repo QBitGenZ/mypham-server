@@ -12,9 +12,12 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
     if(status || status != 'all') {
       query = query.find({status: status})
+      console.log(status, query)
     }
 
     query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
+
+    console.log(query)
 
     const data = await query.skip((page - 1) * limit).limit(limit);
 
