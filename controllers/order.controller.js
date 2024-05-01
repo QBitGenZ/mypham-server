@@ -10,8 +10,8 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
     let query = Order.find();
 
-    if(status) {
-      query.find({status: status})
+    if(status || status != 'all') {
+      query = query.find({status: status})
     }
 
     query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
