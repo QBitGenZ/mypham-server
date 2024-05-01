@@ -8,6 +8,7 @@ let $ = require('jquery');
 const request = require('request');
 const moment = require('moment');
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
 
 
 router.post('/create_payment_url', function (req, res, next) {
@@ -91,6 +92,19 @@ router.get('/vnpay_return', async function (req, res, next) {
             let order = await Order.findById(orderId);
             order.paymentDate = Date.now();
             await order.save();
+
+            let cart = await Cart.findOne({user: order.user})
+            console.log(cart)
+            if (cart) {
+                for (let item of order.items) {
+                    let cartItem = cart.items.find(cartItem => cartItem.product.toString() === item.product.toString());
+                    if (cartItem) {
+                        cartItem.quantity -= item.quantity;
+                    }
+                }
+                await cart.save();
+            }
+            
 
             res.redirect(`${process.env.CLIENT_ROOT}/checkout/success`)
         }
