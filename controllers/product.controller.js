@@ -96,7 +96,7 @@ module.exports = {
       const type = req.query.type;
       const brand = req.query.brand;
 
-      let query = Product.find().sort({_id: -1})
+      let query = Product.find().sort({name: -1})
         .populate('type').populate('feedbacks').populate('brand');
 
       if (type) {
