@@ -18,11 +18,11 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
     query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
 
-    
+
 
     const data = await query.skip((page - 1) * limit).limit(limit);
 
-    const totalDoc = await query.countDocuments(); // Sửa lỗi ở đây
+    const totalDoc = await Order.countDocuments(query._conditions); // Sửa lỗi ở đây
     const totalPage = Math.ceil(totalDoc / limit);
 
     return res.status(200).json({
