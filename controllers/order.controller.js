@@ -8,14 +8,14 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     const page = parseInt(req.query.page || 1);
     const status = req.query.status;
 
-    let query = Order.find();
+    let query = await Order.find();
 
     if(status && status != 'all') {
-      query = query.find({status: status})
+      query = await query.find({status: status})
       console.log(status, query)
     }
 
-    query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
+    query = await query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
 
     console.log(query)
 
