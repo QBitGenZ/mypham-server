@@ -6,11 +6,11 @@ exports.getAllOrdersByAdmin = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit || 10);
     const page = parseInt(req.query.page || 1);
-    const status = req.query.status;
+    const status = req.query.status || 'all';
 
     let query = Order.find();
 
-    if(status && status != 'all') {
+    if(status != 'all') {
       query = query.find({status: status})
       console.log(status)
     }
@@ -22,7 +22,7 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     const data = await query.skip((page - 1) * limit).limit(limit);
     console.log(data)
 
-    const totalDoc = await Order.countDocuments(); // Sửa lỗi ở đây
+    const totalDoc = await Order.countDocuments(query._conditions); // Sửa lỗi ở đây
     const totalPage = Math.ceil(totalDoc / limit);
 
     return res.status(200).json({
