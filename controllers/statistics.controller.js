@@ -59,18 +59,35 @@ module.exports = {
 
   getInventory: async (req, res) => {
     try {
-      const products = await Product.find().sort({quantity: -1});
+      const limit = parseInt(req.query.limit || 10);
+      const page = parseInt(req.query.page || 1);
+
+      const currentDate = new Date();
+      let query = Product.find({ expiryDate: { $gte: currentDate }, quantity: { $gt: 0 } }).sort({quantity: -1})      
+
+      const data = await query.skip((page - 1) * limit).limit(limit);
+
       const inventory = {};
 
-      products.forEach(product => {
-        if (product.quantity) {
-          inventory[product.name] = product.quantity;
+      data.forEach(item => {
+        inventory[item.name] = item.quantity;
+      })
+    
+      const totalDoc = await Product.countDocuments(query._conditions);
+      const totalPage = Math.ceil(totalDoc / limit);
+
+      return res.status(200).json({
+        inventory,
+        meta: {
+          page,
+          limit,
+          totalDoc,
+          totalPage,
         }
       });
-
-      res.status(200).json({ data:inventory });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      console.error(error); // Log lỗi ra console để debug
+      return res.status(500).json({ error: 'Internal server error' }); // Trả về lỗi 500 nếu có lỗi xảy ra
     }
   },
 
