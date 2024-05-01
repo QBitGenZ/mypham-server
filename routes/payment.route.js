@@ -7,6 +7,7 @@ let router = express.Router();
 let $ = require('jquery');
 const request = require('request');
 const moment = require('moment');
+const Order = require('../models/Order');
 
 
 router.post('/create_payment_url', function (req, res, next) {
@@ -25,7 +26,7 @@ router.post('/create_payment_url', function (req, res, next) {
     let secretKey = process.env.VNP_HASHSECRET;
     let vnpUrl = process.env.VNP_URL;
     let returnUrl = process.env.VNP_RETURNURL;
-    let orderId = moment(date).format('DDHHmmss');
+    let orderId = req.body.order;
     let amount = req.body.amount;
     
     let locale = req.body.language;
@@ -60,10 +61,12 @@ router.post('/create_payment_url', function (req, res, next) {
     res.json({vnpUrl});
 });
 
-router.get('/vnpay_return', function (req, res, next) {
+router.get('/vnpay_return', async function (req, res, next) {
     let vnp_Params = req.query;
 
     let secureHash = vnp_Params['vnp_SecureHash'];
+    let orderId = vnp_Params['vnp_TxnRef'];
+    let code = vnp_Params['vnp_ResponseCode']
 
     delete vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHashType'];
@@ -84,9 +87,19 @@ router.get('/vnpay_return', function (req, res, next) {
 
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+        if(code === '00') {
+            let order = await Order.findById(orderId);
+            order.paymentDate = Date.now();
+            await order.save();
+
+            res.redirect(`${process.env.CLIENT_ROOT}/checkout/success`)
+        }
+        else {
+            res.redirect(`${process.env.CLIENT_ROOT}`)
+        }
 
         // res.send({status: 'success', code: vnp_Params['vnp_ResponseCode']});
-        res.redirect(`${process.env.CLIENT_ROOT}/checkout/success`)
+        
     } else{
         res.send({status: 'success', code: '97'})
     }
