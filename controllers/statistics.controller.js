@@ -99,6 +99,9 @@ module.exports = {
 
       const bestSellingProducts = await Promise.all(topProductsIds.map(async productId => {
         const product = await Product.findById(productId);
+        if(product === null)  {
+          return null;
+        }
         return {
           _id: product._id,
           name: product.name,
@@ -106,7 +109,7 @@ module.exports = {
         };
       }));
 
-      res.status(200).json({ data: bestSellingProducts });
+      res.status(200).json({ data: bestSellingProducts.filter((product) =>  product != null) });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
