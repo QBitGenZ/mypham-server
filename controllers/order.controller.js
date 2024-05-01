@@ -10,7 +10,7 @@ exports.getAllOrdersByAdmin = async (req, res) => {
 
     let query = Order.find();
 
-    if(status || status != 'all') {
+    if(status && status != 'all') {
       query = query.find({status: status})
       console.log(status, query)
     }
