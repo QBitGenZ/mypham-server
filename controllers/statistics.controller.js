@@ -59,7 +59,7 @@ module.exports = {
 
   getInventory: async (req, res) => {
     try {
-      const products = await Product.find();
+      const products = await Product.find().sort({quantity: -1});
       const inventory = {};
 
       products.forEach(product => {
