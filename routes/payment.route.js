@@ -101,6 +101,9 @@ router.get('/vnpay_return', async function (req, res, next) {
                     let cartItem = cart.items.find(cartItem => cartItem.product.toString() === item.product.toString());
                     if (cartItem) {
                         cartItem.quantity -= item.quantity;
+                        if (cartItem.quantity <= 0) {
+                            cart.items.pull(cartItem._id);
+                          }
                     }
                 }
                 await cart.save();
