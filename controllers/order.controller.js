@@ -7,13 +7,13 @@ exports.getAllOrdersByAdmin = async (req, res) => {
     const limit = parseInt(req.query.limit || 10);
     const page = parseInt(req.query.page || 1);
     const status = req.query.status || 'all';
-    console.log(status)
-    
+    console.log(1, status)
+
     let query = Order.find();
 
     if(status != 'all') {
       query = query.find({status: status})
-      console.log(status)
+      console.log(2, status)
     }
 
     query = query.sort({_id: -1}).populate('user').populate('items.product').populate({ path: 'items.product', populate: { path: 'brand' } });
